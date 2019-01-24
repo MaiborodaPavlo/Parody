@@ -1,7 +1,6 @@
 /* global HTMLElement Proxy */
 import "babel-polyfill"
 
-
 export class Parody{
     constructor(props){
         if(typeof props !== "object"){
@@ -11,6 +10,10 @@ export class Parody{
         this.props = props;
         this.isMount = false;
         this.targetNode;
+    }
+
+    initState(obj) {
+        this.state = watchObj(obj, this.render.bind(this));
     }
 
     bindMount(selector){
@@ -37,20 +40,48 @@ export function ParodyDom(tag, props, ...children){
 
     let node = document.createElement(tag);
 
-    children.forEach((child) => {
+    let addChildren = (child) => {
         if (child instanceof HTMLElement) {
             node.appendChild(child);
         }
-        else if (child instanceof Array){
-            child.forEach((childEl) => {node.appendChild(childEl)});
+        else if (typeof child === 'object'){
+            for (let elem of child){
+                addChildren(elem);
+            }
         }
         else {
             let textNode = document.createTextNode(child);
             node.appendChild(textNode);
         }
-    });
+    }
+
+    children.forEach(addChildren);
 
     Object.assign(node, props);
 
     return node;
 }
+
+function watchObj(el, func){
+
+    return new Proxy(el, {
+
+        set(target, name, value){
+            target[name] = value;
+            func();
+            return true;
+        },
+
+        get(target, name){
+
+            switch (typeof target[name]) {
+                case 'object':
+                    return watchObj(target[name], func);
+                case 'function':
+                    return target[name].bind(target);
+                default:
+                    return target[name];
+            }
+        }
+    });
+};

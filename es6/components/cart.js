@@ -1,24 +1,21 @@
 import {Parody, ParodyDom} from '../parody';
 import InputNumber from './input-number';
-import watchObj from "./watchobj"
 
 export default class Cart extends Parody{
     constructor(props){
         super(props);
 
-        this.state = {
+        this.initState({
             products: [
                 {price: 1000, rest: 10, current: 1},
                 {price: 2000, rest: 5, current: 2}
             ]
-        };
-
-        this.proxyState = watchObj(this.state, this.render.bind(this));
+        });
     }
 
     onChange(ind, val){
 
-        this.proxyState.products[ind].current = val;
+        this.state.products[ind].current = val;
     }
 
     render(){
