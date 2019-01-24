@@ -20,6 +20,9 @@ let conf = {
                 // exclude: '/node_modules/'
             }
         ]
+    },
+    node: {
+        fs: "empty"
     }
 };
 
