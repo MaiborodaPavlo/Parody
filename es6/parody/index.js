@@ -1,4 +1,7 @@
-/* global HTMLElement */
+/* global HTMLElement Proxy */
+import "babel-polyfill"
+
+
 export class Parody{
     constructor(props){
         if(typeof props !== "object"){
@@ -30,9 +33,9 @@ export function ParodyDom(tag, props, ...children){
     if(typeof tag === "function"){
         return (new tag(props)).render();
     }
-    console.log(tag);
-    console.log(props);
-    console.log(children);
+    // console.log(tag);
+    // console.log(props);
+    // console.log(children);
     
     let node = document.createElement(tag);
 

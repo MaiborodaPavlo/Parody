@@ -1,5 +1,6 @@
 import {Parody, ParodyDom} from '../parody';
 import InputNumber from './input-number';
+import watchObj from "./watchobj"
 
 export default class Cart extends Parody{
     constructor(props){
@@ -11,11 +12,14 @@ export default class Cart extends Parody{
                 {price: 2000, rest: 5, current: 2}
             ]
         };
+
+        this.proxyState = watchObj(this.state, this.render.bind(this));
     }
 
     onChange(ind, val){
-        this.state.products[ind].current = val;
-        this.render();
+        this.proxyState.products[ind].current = val;
+        //this.render();
+
         /* 
             п. №1
             в идеале здесь не хотелось бы вызывать render вручную

@@ -1,4 +1,4 @@
-import {Parody} from '../parody';
+import {Parody, ParodyDom} from '../parody';
 
 export default class InputNumber extends Parody{
     constructor(props){
