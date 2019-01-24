@@ -30,20 +30,21 @@ export class Parody{
 }
 
 export function ParodyDom(tag, props, ...children){
+
     if(typeof tag === "function"){
         return (new tag(props)).render();
     }
-    // console.log(tag);
-    // console.log(props);
-    // console.log(children);
-    
+
     let node = document.createElement(tag);
 
     children.forEach((child) => {
-        if(child instanceof HTMLElement){
+        if (child instanceof HTMLElement) {
             node.appendChild(child);
         }
-        else{
+        else if (child instanceof Array){
+            child.forEach((childEl) => {node.appendChild(childEl)});
+        }
+        else {
             let textNode = document.createTextNode(child);
             node.appendChild(textNode);
         }

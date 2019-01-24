@@ -17,15 +17,8 @@ export default class Cart extends Parody{
     }
 
     onChange(ind, val){
-        this.proxyState.products[ind].current = val;
-        //this.render();
 
-        /* 
-            п. №1
-            в идеале здесь не хотелось бы вызывать render вручную
-            на уровне базового класса скрестите state и watchObj из дз№2 для минимальной реактивности
-            она не будет настоящей, например, this.state.products.push таким образом реактивным не станет
-        */
+        this.proxyState.products[ind].current = val;
     }
 
     render(){
@@ -33,37 +26,17 @@ export default class Cart extends Parody{
             return total + item.price * item.current;
         }, 0);
 
-        let prod = this.state.products;
+        let inputs = this.state.products.map((item, i) => {
+            return <InputNumber min={1} max={item.rest} value={item.current}
+                                change={this.onChange.bind(this, i)}/>
+        });
 
         return super.render(
             <div>
-                <InputNumber min="1" max={prod[0].rest} value={prod[0].current} 
-                             change={this.onChange.bind(this, 0)} />
-                <InputNumber min="1" max={prod[1].rest} value={prod[1].current} 
-                             change={this.onChange.bind(this, 1)} />
+                {inputs}
                 <hr/>
                 <div>{sum}</div>
             </div>
         );
-
-        /*
-            // правильный вариант
-            let inputs = this.state.products.map((item, i) => {
-                return <InputNumber min={1} max={item.rest} value={item.current}
-                                    change={this.onChange.bind(this, i)}/>
-            });
-
-            return super.render(
-                <div>
-                    {inputs}
-                    <hr/>
-                    <div>{sum}</div>
-                </div>
-            );
-
-            // но он не сработает! inputs - массив, в ParodyDom его приравняют к textNode
-            // в итоге получится [object HTMLDivElement],[object HTMLDivElement] вместо компонетов
-            // поправьте данный момент
-        */
-    }   
+    }
 }
